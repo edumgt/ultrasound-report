@@ -13,23 +13,15 @@ from core.stt_whisper import STTConfig, WhisperSTT
 from .models import RecordingSession
 from .services import append_audit_log, build_report_service, persist_session_outputs
 
+_SHARED_STT = None
+
 
 class LiveTranscriptionConsumer(AsyncJsonWebsocketConsumer):
     async def connect(self):
         await self.accept()
         self.report_service = await database_sync_to_async(build_report_service)()
         self.runtime = detect_whisper_runtime()
-        self.stt = await asyncio.to_thread(
-            WhisperSTT,
-            STTConfig(
-                model_size='small',
-                device=self.runtime.device,
-                compute_type=self.runtime.compute_type,
-                beam_size=5,
-                vad_filter=True,
-                language=None,
-            ),
-        )
+        self.stt = await asyncio.to_thread(get_shared_stt, self.runtime)
         self.session = await database_sync_to_async(RecordingSession.objects.create)(report_status=RecordingSession.ReportStatus.DRAFT)
         self.full_transcript = ''
         await self.send_json({'event': 'connected', 'session_id': self.session.id, 'device': self.runtime.device})
@@ -94,3 +86,19 @@ class LiveTranscriptionConsumer(AsyncJsonWebsocketConsumer):
         self.session.patient_id = patient_id.strip()
         self.session.save(update_fields=['patient_id', 'updated_at'])
         return self.session
+
+
+def get_shared_stt(runtime) -> WhisperSTT:
+    global _SHARED_STT
+    if _SHARED_STT is None:
+        _SHARED_STT = WhisperSTT(
+            STTConfig(
+                model_size='small',
+                device=runtime.device,
+                compute_type=runtime.compute_type,
+                beam_size=5,
+                vad_filter=True,
+                language=None,
+            )
+        )
+    return _SHARED_STT

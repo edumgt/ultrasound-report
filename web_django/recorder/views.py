@@ -18,6 +18,10 @@ from .services import append_audit_log, build_report_service, persist_session_ou
 from .tasks import process_recording_session_async
 
 
+def should_process_async(request: HttpRequest) -> bool:
+    return request.POST.get('process_async') == '1' and not getattr(settings, 'CELERY_TASK_ALWAYS_EAGER', False)
+
+
 @require_GET
 def index(request: HttpRequest) -> HttpResponse:
     query = request.GET.get('q', '').strip()
@@ -102,7 +106,7 @@ def upload_audio(request: HttpRequest):
     session.audio_file.name = str(target.relative_to(settings.BASE_DIR))
     session.save(update_fields=['audio_file'])
 
-    run_async = request.POST.get('process_async') == '1' and not getattr(settings, 'CELERY_TASK_ALWAYS_EAGER', False)
+    run_async = should_process_async(request)
     if run_async:
         process_recording_session_async.delay(session.id, transcript)
     else:

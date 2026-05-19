@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import json
-from io import BytesIO
+from pathlib import Path
 
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -15,7 +15,8 @@ from recorder.models import RecordingSession
 
 class ReportServiceTests(TestCase):
     def test_measurement_normalization_and_structuring(self):
-        service = ReportService('/home/runner/work/ultrasound-report/ultrasound-report/assets')
+        assets_dir = Path(__file__).resolve().parents[2] / 'assets'
+        service = ReportService(assets_dir)
         bundle = service.build_report_bundle('right robe hypo echoic nodule 약 1.5 센티')
         self.assertEqual(bundle['structured']['location'], 'Right Lobe')
         self.assertEqual(bundle['structured']['lesion'], 'Nodule')

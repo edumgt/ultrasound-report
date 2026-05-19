@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List, Tuple, Any
 import json
+import re
 from Levenshtein import ratio as lev_ratio
 
 
@@ -85,10 +86,5 @@ class TermCorrector:
 
 
 def replace_case_insensitive(text: str, needle_lower: str, replacement: str) -> str:
-    t_low = text.lower()
-    idx = t_low.find(needle_lower)
-    while idx >= 0:
-        text = text[:idx] + replacement + text[idx + len(needle_lower):]
-        t_low = text.lower()
-        idx = t_low.find(needle_lower, idx + len(replacement))
-    return text
+    pattern = re.compile(re.escape(needle_lower), re.IGNORECASE)
+    return pattern.sub(replacement, text)

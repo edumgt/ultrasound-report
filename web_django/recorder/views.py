@@ -6,6 +6,7 @@ from uuid import uuid4
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.utils.text import get_valid_filename
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
@@ -87,7 +88,8 @@ def upload_audio(request: HttpRequest):
 
     recordings_dir = Path(settings.BASE_DIR) / 'recordings'
     recordings_dir.mkdir(parents=True, exist_ok=True)
-    filename = f'{uuid4().hex}_{audio_file.name}'
+    safe_name = get_valid_filename(Path(audio_file.name).name)
+    filename = f'{uuid4().hex}_{safe_name}'
     target = recordings_dir / filename
     with target.open('wb') as f:
         for chunk in audio_file.chunks():
@@ -100,13 +102,14 @@ def upload_audio(request: HttpRequest):
     session.audio_file.name = str(target.relative_to(settings.BASE_DIR))
     session.save(update_fields=['audio_file'])
 
-    if getattr(settings, 'CELERY_TASK_ALWAYS_EAGER', False) or request.POST.get('process_async') != '1':
+    run_async = request.POST.get('process_async') == '1' and not getattr(settings, 'CELERY_TASK_ALWAYS_EAGER', False)
+    if run_async:
+        process_recording_session_async.delay(session.id, transcript)
+    else:
         service = build_report_service()
         bundle = service.build_report_bundle(transcript)
         persist_session_outputs(session, bundle, transcript)
         append_audit_log(session, 'upload_audio', request.user, {'saved_file': session.audio_file.name})
-    else:
-        process_recording_session_async.delay(session.id, transcript)
 
     return JsonResponse(
         {

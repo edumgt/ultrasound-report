@@ -8,6 +8,7 @@ const player = document.getElementById('player');
 const serverResponseEl = document.getElementById('serverResponse');
 const fhirResponseEl = document.getElementById('fhirResponse');
 const patientIdEl = document.getElementById('patientId');
+const AUDIO_CHUNK_MS = 1500;
 
 let mediaRecorder;
 let mediaStream;
@@ -100,7 +101,7 @@ startBtn.addEventListener('click', async () => {
         socket.send(JSON.stringify({ action: 'stop' }));
       }
     };
-    mediaRecorder.start(1500);
+    mediaRecorder.start(AUDIO_CHUNK_MS);
     recognition = initSpeechRecognition();
     if (recognition) recognition.start();
     setStatus('녹음 중...');

@@ -4,23 +4,16 @@ import re
 from typing import List
 
 UNIT_MAP = {
-    '센티미터': 'cm',
-    '센티': 'cm',
-    'cm': 'cm',
-    '밀리미터': 'mm',
-    '밀리': 'mm',
-    'mm': 'mm',
+    "센티미터": "cm",
+    "센티": "cm",
+    "cm": "cm",
+    "밀리미터": "mm",
+    "밀리": "mm",
+    "mm": "mm",
 }
-
-DIMENSION_RE = re.compile(
-    r'(?:약\s*)?(\d+(?:\.\d+)?)\s*(?:x|×|by|X)\s*(\d+(?:\.\d+)?)\s*'
-    r'(센티미터|센티|cm|밀리미터|밀리|mm)',
-    re.IGNORECASE,
-)
-SINGLE_RE = re.compile(
-    r'(?:약\s*)?(\d+(?:\.\d+)?)\s*(센티미터|센티|cm|밀리미터|밀리|mm)',
-    re.IGNORECASE,
-)
+NUMBER_TOKEN_RE = re.compile(r"^\d+(?:\.\d+)?$")
+COMBINED_DIMENSION_RE = re.compile(r"^(\d+(?:\.\d+)?)(?:x|×|by|X)(\d+(?:\.\d+)?)(센티미터|센티|cm|밀리미터|밀리|mm)$", re.IGNORECASE)
+COMBINED_SINGLE_RE = re.compile(r"^(\d+(?:\.\d+)?)(센티미터|센티|cm|밀리미터|밀리|mm)$", re.IGNORECASE)
 
 
 def _normalize_unit(unit: str) -> str:
@@ -28,24 +21,55 @@ def _normalize_unit(unit: str) -> str:
 
 
 def normalize_measurements(text: str) -> str:
-    def replace_dim(match: re.Match[str]) -> str:
-        first, second, unit = match.groups()
-        return f'{first}×{second}{_normalize_unit(unit)}'
+    tokens = text.split()
+    normalized: List[str] = []
+    i = 0
 
-    normalized = DIMENSION_RE.sub(replace_dim, text)
+    while i < len(tokens):
+        token = tokens[i]
 
-    def replace_single(match: re.Match[str]) -> str:
-        value, unit = match.groups()
-        return f'{value}{_normalize_unit(unit)}'
+        if token == "약":
+            i += 1
+            continue
 
-    return SINGLE_RE.sub(replace_single, normalized)
+        dim_match = COMBINED_DIMENSION_RE.match(token)
+        if dim_match:
+            first, second, unit = dim_match.groups()
+            normalized.append(f"{first}×{second}{_normalize_unit(unit)}")
+            i += 1
+            continue
+
+        single_match = COMBINED_SINGLE_RE.match(token)
+        if single_match:
+            value, unit = single_match.groups()
+            normalized.append(f"{value}{_normalize_unit(unit)}")
+            i += 1
+            continue
+
+        next_token = tokens[i + 1] if i + 1 < len(tokens) else ""
+        third_token = tokens[i + 2] if i + 2 < len(tokens) else ""
+        fourth_token = tokens[i + 3] if i + 3 < len(tokens) else ""
+
+        if NUMBER_TOKEN_RE.match(token) and next_token in {"x", "×", "by", "X"} and NUMBER_TOKEN_RE.match(third_token) and fourth_token.lower() in UNIT_MAP:
+            normalized.append(f"{token}×{third_token}{_normalize_unit(fourth_token)}")
+            i += 4
+            continue
+
+        if NUMBER_TOKEN_RE.match(token) and next_token.lower() in UNIT_MAP:
+            normalized.append(f"{token}{_normalize_unit(next_token)}")
+            i += 2
+            continue
+
+        normalized.append(token)
+        i += 1
+
+    return " ".join(normalized)
 
 
 def extract_measurements(text: str) -> List[str]:
     normalized = normalize_measurements(text)
-    matches = []
-    for match in re.finditer(r"\b\d+(?:\.\d+)?(?:×\d+(?:\.\d+)?)?(?:mm|cm)\b", normalized):
-        token = match.group(0)
+    matches: List[str] = []
+    for token in re.findall(r"\d+(?:\.\d+)?(?:×\d+(?:\.\d+)?)?(?:mm|cm)", normalized):
         if token not in matches:
             matches.append(token)
     return matches

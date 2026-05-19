@@ -63,7 +63,13 @@ class LiveTranscriptionConsumer(AsyncJsonWebsocketConsumer):
             tmp.write(bytes_data)
             temp_path = Path(tmp.name)
         try:
-            segments, _info = self.stt.model.transcribe(str(temp_path), beam_size=5, vad_filter=True, language=None)
+            segments, _info = self.stt.model.transcribe(
+                str(temp_path),
+                beam_size=self.stt.cfg.beam_size,
+                vad_filter=self.stt.cfg.vad_filter,
+                language=self.stt.cfg.language,
+                initial_prompt=self.stt.cfg.initial_prompt,
+            )
             return ' '.join(seg.text.strip() for seg in segments if getattr(seg, 'text', None)).strip()
         finally:
             temp_path.unlink(missing_ok=True)

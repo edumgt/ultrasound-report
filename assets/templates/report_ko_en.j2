@@ -1,11 +1,1 @@
-[Ultrasound Report]
-
-- Location: {{ structured.location | default("N/A") }}
-- Lesion:   {{ structured.lesion | default("N/A") }}
-- Feature:  {{ structured.feature | default("N/A") }}
-
-[Findings]
-{{ cleaned_text }}
-
-[Notes]
-{{ structured.notes | default("") }}
+{% include 'report_generic.j2' %}

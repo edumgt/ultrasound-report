@@ -1,0 +1,24 @@
+version: '3.9'
+
+services:
+  web:
+    build: .
+    command: python web_django/manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - '8000:8000'
+    depends_on:
+      - redis
+  celery:
+    build: .
+    command: celery -A config worker -l info
+    working_dir: /app/web_django
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+  redis:
+    image: redis:7-alpine
+    ports:
+      - '6379:6379'

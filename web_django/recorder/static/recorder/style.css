@@ -2,6 +2,7 @@ body {
   font-family: Arial, sans-serif;
   background: #f6f7fb;
   margin: 0;
+  color: #18223a;
 }
 
 .container {
@@ -10,12 +11,42 @@ body {
   padding: 24px;
   background: #fff;
   border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(24, 34, 58, 0.08);
 }
 
-.controls {
+.container.wide {
+  max-width: 1180px;
+}
+
+.page-header, .grid-two {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+
+.gap-lg {
+  gap: 24px;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #e2e8f5;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.controls, .search-form {
   display: flex;
   gap: 8px;
   margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.stack-gap {
+  display: grid;
+  gap: 12px;
 }
 
 button {
@@ -32,15 +63,57 @@ button:disabled {
   cursor: not-allowed;
 }
 
-textarea, pre {
+textarea, pre, input, select {
   width: 100%;
   box-sizing: border-box;
   border: 1px solid #d7dbeb;
   border-radius: 8px;
   padding: 10px;
+  background: #fff;
 }
 
 pre {
   min-height: 72px;
   background: #f9faff;
+  white-space: pre-wrap;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  text-align: left;
+  padding: 10px;
+  border-bottom: 1px solid #edf1fa;
+}
+
+.status-pill {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.status-draft {
+  background: #eef2ff;
+  color: #3949ab;
+}
+
+.status-review {
+  background: #fff8e1;
+  color: #a06a00;
+}
+
+.status-final {
+  background: #e7f8ef;
+  color: #16764b;
+}
+
+@media (max-width: 900px) {
+  .page-header, .grid-two {
+    grid-template-columns: 1fr;
+  }
 }

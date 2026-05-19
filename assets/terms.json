@@ -22,6 +22,128 @@
       ]
     },
     {
+      "key": "ISTHMUS",
+      "canonical": "Isthmus",
+      "aliases": [
+        "이스트무스",
+        "이스머스"
+      ]
+    },
+    {
+      "key": "UPPER_POLE",
+      "canonical": "Upper Pole",
+      "aliases": [
+        "어퍼 폴",
+        "상극"
+      ]
+    },
+    {
+      "key": "LOWER_POLE",
+      "canonical": "Lower Pole",
+      "aliases": [
+        "로워 폴",
+        "하극"
+      ]
+    },
+    {
+      "key": "LIVER",
+      "canonical": "Liver",
+      "aliases": [
+        "리버",
+        "간"
+      ]
+    },
+    {
+      "key": "RIGHT_HEPATIC_LOBE",
+      "canonical": "Right Hepatic Lobe",
+      "aliases": [
+        "라이트 헤파틱 로브",
+        "간 우엽"
+      ]
+    },
+    {
+      "key": "LEFT_HEPATIC_LOBE",
+      "canonical": "Left Hepatic Lobe",
+      "aliases": [
+        "레프트 헤파틱 로브",
+        "간 좌엽"
+      ]
+    },
+    {
+      "key": "CAUDATE_LOBE",
+      "canonical": "Caudate Lobe",
+      "aliases": [
+        "카우데이트 로브",
+        "꼬리엽"
+      ]
+    },
+    {
+      "key": "GALLBLADDER",
+      "canonical": "Gallbladder",
+      "aliases": [
+        "GB",
+        "갈블래더",
+        "담낭"
+      ]
+    },
+    {
+      "key": "CBD",
+      "canonical": "Common Bile Duct",
+      "aliases": [
+        "CBD",
+        "커먼 바일 덕트",
+        "총담관"
+      ]
+    },
+    {
+      "key": "PANCREAS_HEAD",
+      "canonical": "Pancreas Head",
+      "aliases": [
+        "췌장 두부",
+        "판크레아스 헤드"
+      ]
+    },
+    {
+      "key": "PANCREAS_BODY",
+      "canonical": "Pancreas Body",
+      "aliases": [
+        "췌장 체부",
+        "판크레아스 바디"
+      ]
+    },
+    {
+      "key": "PANCREAS_TAIL",
+      "canonical": "Pancreas Tail",
+      "aliases": [
+        "췌장 미부",
+        "판크레아스 테일"
+      ]
+    },
+    {
+      "key": "SPLEEN",
+      "canonical": "Spleen",
+      "aliases": [
+        "스플린",
+        "비장"
+      ]
+    },
+    {
+      "key": "KIDNEY_RIGHT",
+      "canonical": "Right Kidney",
+      "aliases": [
+        "라이트 키드니",
+        "우신"
+      ]
+    },
+    {
+      "key": "KIDNEY_LEFT",
+      "canonical": "Left Kidney",
+      "aliases": [
+        "레프트 키드니",
+        "좌신"
+      ]
+    },
+    {
       "key": "HYPOECHOIC",
       "canonical": "Hypoechoic",
       "aliases": [
@@ -38,6 +160,142 @@
         "하이퍼에코익",
         "하이퍼 에코익",
         "hyper echoic"
+      ]
+    },
+    {
+      "key": "ISOECHOIC",
+      "canonical": "Isoechoic",
+      "aliases": [
+        "아이소에코익",
+        "iso echoic"
+      ]
+    },
+    {
+      "key": "ANECHOIC",
+      "canonical": "Anechoic",
+      "aliases": [
+        "애니코익",
+        "무에코"
+      ]
+    },
+    {
+      "key": "HETEROGENEOUS",
+      "canonical": "Heterogeneous",
+      "aliases": [
+        "헤테로지니어스",
+        "불균질"
+      ]
+    },
+    {
+      "key": "HOMOGENEOUS",
+      "canonical": "Homogeneous",
+      "aliases": [
+        "호모지니어스",
+        "균질"
+      ]
+    },
+    {
+      "key": "WELL_DEFINED",
+      "canonical": "Well-defined",
+      "aliases": [
+        "웰 디파인드",
+        "경계 명확"
+      ]
+    },
+    {
+      "key": "ILL_DEFINED",
+      "canonical": "Ill-defined",
+      "aliases": [
+        "일 디파인드",
+        "경계 불명확"
+      ]
+    },
+    {
+      "key": "IRREGULAR_MARGIN",
+      "canonical": "Irregular Margin",
+      "aliases": [
+        "irregular margin",
+        "불규칙 경계"
+      ]
+    },
+    {
+      "key": "POSTERIOR_SHADOWING",
+      "canonical": "Posterior Shadowing",
+      "aliases": [
+        "포스테리어 쉐도잉",
+        "후방 음영"
+      ]
+    },
+    {
+      "key": "POSTERIOR_ENHANCEMENT",
+      "canonical": "Posterior Enhancement",
+      "aliases": [
+        "포스테리어 인핸스먼트",
+        "후방 증강"
+      ]
+    },
+    {
+      "key": "CALCIFICATION",
+      "canonical": "Calcification",
+      "aliases": [
+        "칼시피케이션",
+        "석회화"
+      ]
+    },
+    {
+      "key": "MICROCALCIFICATION",
+      "canonical": "Microcalcification",
+      "aliases": [
+        "마이크로칼시피케이션",
+        "미세 석회화"
+      ]
+    },
+    {
+      "key": "VASCULARITY",
+      "canonical": "Vascularity",
+      "aliases": [
+        "바스큘러리티",
+        "혈류"
+      ]
+    },
+    {
+      "key": "INCREASED_VASCULARITY",
+      "canonical": "Increased Vascularity",
+      "aliases": [
+        "혈류 증가",
+        "increased vascularity"
+      ]
+    },
+    {
+      "key": "SEPTATION",
+      "canonical": "Septation",
+      "aliases": [
+        "셉테이션",
+        "격막"
+      ]
+    },
+    {
+      "key": "SOLID",
+      "canonical": "Solid",
+      "aliases": [
+        "솔리드",
+        "고형"
+      ]
+    },
+    {
+      "key": "CYSTIC",
+      "canonical": "Cystic",
+      "aliases": [
+        "시스틱",
+        "낭성"
+      ]
+    },
+    {
+      "key": "COMPLEX",
+      "canonical": "Complex",
+      "aliases": [
+        "컴플렉스",
+        "복합성"
       ]
     },
     {
@@ -58,20 +316,208 @@
         "노듈러",
         "noddle"
       ]
+    },
+    {
+      "key": "CYST",
+      "canonical": "Cyst",
+      "aliases": [
+        "시스트",
+        "낭종"
+      ]
+    },
+    {
+      "key": "POLYP",
+      "canonical": "Polyp",
+      "aliases": [
+        "폴립",
+        "용종"
+      ]
+    },
+    {
+      "key": "STONE",
+      "canonical": "Stone",
+      "aliases": [
+        "스톤",
+        "결석"
+      ]
+    },
+    {
+      "key": "SLUDGE",
+      "canonical": "Sludge",
+      "aliases": [
+        "슬러지",
+        "담니"
+      ]
+    },
+    {
+      "key": "DILATATION",
+      "canonical": "Dilatation",
+      "aliases": [
+        "딜라테이션",
+        "확장"
+      ]
+    },
+    {
+      "key": "THICKENING",
+      "canonical": "Wall Thickening",
+      "aliases": [
+        "월 시크닝",
+        "벽 비후"
+      ]
+    },
+    {
+      "key": "ABSCESS",
+      "canonical": "Abscess",
+      "aliases": [
+        "앱세스",
+        "농양"
+      ]
+    },
+    {
+      "key": "HEMANGIOMA",
+      "canonical": "Hemangioma",
+      "aliases": [
+        "헤만지오마",
+        "혈관종"
+      ]
+    },
+    {
+      "key": "FATTY_CHANGE",
+      "canonical": "Fatty Change",
+      "aliases": [
+        "지방간",
+        "fatty liver"
+      ]
+    },
+    {
+      "key": "HYDRONEPHROSIS",
+      "canonical": "Hydronephrosis",
+      "aliases": [
+        "하이드로네프로시스",
+        "수신증"
+      ]
+    },
+    {
+      "key": "ATROPHY",
+      "canonical": "Atrophy",
+      "aliases": [
+        "아트로피",
+        "위축"
+      ]
+    },
+    {
+      "key": "DUCT_DILATATION",
+      "canonical": "Duct Dilatation",
+      "aliases": [
+        "담관 확장",
+        "duct dilatation"
+      ]
+    },
+    {
+      "key": "LYMPH_NODE",
+      "canonical": "Lymph Node",
+      "aliases": [
+        "림프 노드",
+        "림프절"
+      ]
+    },
+    {
+      "key": "THYROIDITIS",
+      "canonical": "Thyroiditis",
+      "aliases": [
+        "타이로이디티스",
+        "갑상선염"
+      ]
+    },
+    {
+      "key": "GOITER",
+      "canonical": "Goiter",
+      "aliases": [
+        "고이터",
+        "갑상선종"
+      ]
     }
   ],
   "categories": {
     "location": [
       "RIGHT_LOBE",
-      "LEFT_LOBE"
+      "LEFT_LOBE",
+      "ISTHMUS",
+      "UPPER_POLE",
+      "LOWER_POLE",
+      "LIVER",
+      "RIGHT_HEPATIC_LOBE",
+      "LEFT_HEPATIC_LOBE",
+      "CAUDATE_LOBE",
+      "GALLBLADDER",
+      "CBD",
+      "PANCREAS_HEAD",
+      "PANCREAS_BODY",
+      "PANCREAS_TAIL",
+      "SPLEEN",
+      "KIDNEY_RIGHT",
+      "KIDNEY_LEFT"
     ],
     "lesion": [
       "MASS",
-      "NODULE"
+      "NODULE",
+      "CYST",
+      "POLYP",
+      "STONE",
+      "SLUDGE",
+      "ABSCESS",
+      "HEMANGIOMA",
+      "LYMPH_NODE",
+      "GOITER",
+      "THYROIDITIS"
     ],
     "feature": [
       "HYPOECHOIC",
-      "HYPERECHOIC"
-    ]
+      "HYPERECHOIC",
+      "ISOECHOIC",
+      "ANECHOIC",
+      "HETEROGENEOUS",
+      "HOMOGENEOUS",
+      "WELL_DEFINED",
+      "ILL_DEFINED",
+      "IRREGULAR_MARGIN",
+      "POSTERIOR_SHADOWING",
+      "POSTERIOR_ENHANCEMENT",
+      "CALCIFICATION",
+      "MICROCALCIFICATION",
+      "VASCULARITY",
+      "INCREASED_VASCULARITY",
+      "SEPTATION",
+      "SOLID",
+      "CYSTIC",
+      "COMPLEX",
+      "DILATATION",
+      "THICKENING",
+      "FATTY_CHANGE",
+      "HYDRONEPHROSIS",
+      "ATROPHY",
+      "DUCT_DILATATION"
+    ],
+    "domains": {
+      "thyroid": [
+        "RIGHT_LOBE",
+        "LEFT_LOBE",
+        "ISTHMUS",
+        "NODULE",
+        "GOITER",
+        "THYROIDITIS"
+      ],
+      "abdomen": [
+        "LIVER",
+        "GALLBLADDER",
+        "CBD",
+        "PANCREAS_HEAD",
+        "PANCREAS_BODY",
+        "PANCREAS_TAIL",
+        "SPLEEN",
+        "KIDNEY_RIGHT",
+        "KIDNEY_LEFT"
+      ]
+    }
   }
 }

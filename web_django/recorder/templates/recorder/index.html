@@ -8,38 +8,89 @@
   <link rel="stylesheet" href="{% static 'recorder/style.css' %}">
 </head>
 <body>
-  <main class="container">
-    <h1>초음파 리포트 음성 녹음 (Django Web)</h1>
+  <main class="container wide">
+    <header class="page-header">
+      <div>
+        <h1>초음파 리포트 음성 녹음 (Django Web)</h1>
+        <p>실시간 WebSocket 미리보기, 세션 재검토, FHIR/리포트 출력을 지원합니다.</p>
+      </div>
+      <form class="search-form" method="get">
+        <input type="text" name="q" value="{{ query }}" placeholder="환자 ID 검색" />
+        <select name="status">
+          <option value="">전체 상태</option>
+          <option value="draft" {% if status_filter == 'draft' %}selected{% endif %}>Draft</option>
+          <option value="review" {% if status_filter == 'review' %}selected{% endif %}>Review</option>
+          <option value="final" {% if status_filter == 'final' %}selected{% endif %}>Final</option>
+        </select>
+        <button type="submit">검색</button>
+      </form>
+    </header>
 
-    <div class="controls">
-      <button id="startBtn">녹음 시작</button>
-      <button id="stopBtn" disabled>녹음 종료</button>
-      <button id="uploadBtn" disabled>서버 업로드</button>
-    </div>
-
-    <section>
-      <h2>상태</h2>
+    <section class="card">
+      <div class="grid-two">
+        <div>
+          <label for="patientId">환자 ID</label>
+          <input id="patientId" type="text" placeholder="예: P-20260519-01" />
+        </div>
+        <div class="controls">
+          <button id="startBtn">녹음 시작</button>
+          <button id="stopBtn" disabled>녹음 종료</button>
+          <button id="uploadBtn" disabled>서버 업로드</button>
+        </div>
+      </div>
       <p id="status">대기 중</p>
     </section>
 
-    <section>
-      <h2>브라우저 인식 텍스트 (FE 출력)</h2>
-      <textarea id="transcript" rows="8" placeholder="인식된 텍스트가 여기에 표시됩니다..."></textarea>
+    <section class="grid-two gap-lg">
+      <div class="card">
+        <h2>실시간 교정 텍스트</h2>
+        <textarea id="transcript" rows="10" placeholder="실시간 전사 결과"></textarea>
+        <h2>리포트 미리보기</h2>
+        <textarea id="reportPreview" rows="12" placeholder="리포트 미리보기"></textarea>
+      </div>
+      <div class="card">
+        <h2>FHIR DiagnosticReport</h2>
+        <pre id="fhirResponse">(아직 없음)</pre>
+        <h2>녹음 재생</h2>
+        <audio id="player" controls></audio>
+        <h2>서버 응답</h2>
+        <pre id="serverResponse">(아직 없음)</pre>
+      </div>
     </section>
 
-    <section>
-      <h2>녹음 재생</h2>
-      <audio id="player" controls></audio>
-    </section>
-
-    <section>
-      <h2>서버 응답</h2>
-      <pre id="serverResponse">(아직 없음)</pre>
+    <section class="card">
+      <h2>최근 세션</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>환자 ID</th>
+            <th>도메인</th>
+            <th>상태</th>
+            <th>업데이트</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for session in sessions %}
+          <tr>
+            <td><a href="{% url 'session_detail' session.id %}">#{{ session.id }}</a></td>
+            <td>{{ session.patient_id|default:'-' }}</td>
+            <td>{{ session.domain }}</td>
+            <td><span class="status-pill status-{{ session.report_status }}">{{ session.get_report_status_display }}</span></td>
+            <td>{{ session.updated_at }}</td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="5">세션이 없습니다.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </section>
   </main>
 
   <script>
-    window.CSRF_TOKEN = "{{ csrf_token }}";
+    window.CSRF_TOKEN = '{{ csrf_token }}';
   </script>
   <script src="{% static 'recorder/app.js' %}"></script>
 </body>

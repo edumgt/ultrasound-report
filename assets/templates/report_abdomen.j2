@@ -1,0 +1,15 @@
+[Abdomen Ultrasound Report]
+
+- Organ/Location: {{ structured.location | default('N/A') }}
+- Lesion: {{ structured.lesion | default('N/A') }}
+- Feature: {{ structured.feature | default('N/A') }}
+- Size: {{ structured.size | default('N/A') }}
+
+[Findings]
+{{ cleaned_text }}
+
+[Impression]
+{{ structured.impression | default('Abdominal ultrasound finding.') }}
+
+[Recommendation]
+{{ structured.recommendation | default('Correlate with clinical history and follow-up imaging as needed.') }}

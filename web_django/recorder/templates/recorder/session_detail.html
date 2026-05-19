@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Session #{{ session.id }}</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'recorder/style.css' %}">
+</head>
+<body>
+  <main class="container wide">
+    <a href="/">← 목록으로</a>
+    <section class="card">
+      <h1>세션 #{{ session.id }}</h1>
+      <p>환자 ID: {{ session.patient_id|default:'-' }} · 상태: <strong>{{ session.get_report_status_display }}</strong></p>
+      {% if request.user.is_authenticated %}
+      <form method="post" action="{% url 'session_review' session.id %}" class="stack-gap">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">저장 / 상태 갱신</button>
+      </form>
+      {% else %}
+      <p>세션 편집/확정은 로그인 후 가능합니다.</p>
+      {% endif %}
+    </section>
+
+    <section class="grid-two gap-lg">
+      <div class="card">
+        <h2>Raw Transcript</h2>
+        <pre>{{ session.raw_transcript|default:'-' }}</pre>
+        <h2>Corrected Transcript</h2>
+        <pre>{{ session.corrected_transcript|default:'-' }}</pre>
+      </div>
+      <div class="card">
+        <h2>Rendered Report</h2>
+        <pre>{{ session.report_text|default:'-' }}</pre>
+        <h2>FHIR JSON</h2>
+        <pre>{{ session.fhir_json|safe }}</pre>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

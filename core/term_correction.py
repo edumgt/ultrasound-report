@@ -1,14 +1,19 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import List, Dict, Tuple
+from functools import lru_cache
+from pathlib import Path
+from typing import Dict, List, Tuple, Any
 import json
+import re
 from Levenshtein import ratio as lev_ratio
+
 
 @dataclass(frozen=True)
 class Term:
     key: str
     canonical: str
     aliases: List[str]
+
 
 class TermCorrector:
     def __init__(self, terms: List[Term], threshold: float = 0.86):
@@ -24,23 +29,30 @@ class TermCorrector:
                 self.direct[a.lower()] = t.canonical
 
     @staticmethod
-    def load(path: str) -> Tuple["TermCorrector", Dict]:
-        with open(path, "r", encoding="utf-8") as f:
-            obj = json.load(f)
-        terms = [Term(key=x["key"], canonical=x["canonical"], aliases=x.get("aliases", [])) for x in obj["terms"]]
-        return TermCorrector(terms), obj.get("categories", {})
+    def read_payload(path: str | Path) -> Dict[str, Any]:
+        with open(path, 'r', encoding='utf-8') as f:
+            return json.load(f)
 
-    def correct(self, text: str) -> Tuple[str, List[Dict]]:
+    @staticmethod
+    def from_payload(payload: Dict[str, Any]) -> Tuple['TermCorrector', Dict[str, Any]]:
+        terms = [Term(key=x['key'], canonical=x['canonical'], aliases=x.get('aliases', [])) for x in payload['terms']]
+        return TermCorrector(terms), payload.get('categories', {})
+
+    @staticmethod
+    def load(path: str) -> Tuple['TermCorrector', Dict[str, Any]]:
+        return TermCorrector.from_payload(TermCorrector.read_payload(path))
+
+    def correct(self, text: str) -> Tuple[str, List[Dict[str, Any]]]:
         raw = text
         lowered = raw.lower()
-        changes: List[Dict] = []
+        changes: List[Dict[str, Any]] = []
 
         for alias_l, canon in sorted(self.direct.items(), key=lambda x: -len(x[0])):
             if alias_l and alias_l in lowered:
                 before = raw
                 raw = replace_case_insensitive(raw, alias_l, canon)
                 if raw != before:
-                    changes.append({"from": alias_l, "to": canon, "score": 1.0})
+                    changes.append({'from': alias_l, 'to': canon, 'score': 1.0})
                     lowered = raw.lower()
 
         tokens = raw.split()
@@ -48,7 +60,7 @@ class TermCorrector:
         while i < len(tokens):
             replaced = False
             for j in range(min(i + 3, len(tokens)), i, -1):
-                cand = " ".join(tokens[i:j])
+                cand = ' '.join(tokens[i:j])
                 if len(cand) < 4:
                     continue
                 cand_l = cand.lower()
@@ -66,16 +78,19 @@ class TermCorrector:
 
                 if best_to and best_score >= self.threshold:
                     tokens[i:j] = [best_to]
-                    changes.append({"from": cand, "to": best_to, "score": float(best_score)})
+                    changes.append({'from': cand, 'to': best_to, 'score': float(best_score)})
                     replaced = True
                     break
             i += 1 if not replaced else 1
 
-        return " ".join(tokens), changes
+        return ' '.join(tokens), changes
+
 
 def replace_case_insensitive(text: str, needle_lower: str, replacement: str) -> str:
-    t_low = text.lower()
-    idx = t_low.find(needle_lower)
-    if idx < 0:
-        return text
-    return text[:idx] + replacement + text[idx + len(needle_lower):]
+    pattern = _compiled_case_insensitive_pattern(needle_lower)
+    return pattern.sub(replacement, text)
+
+
+@lru_cache(maxsize=512)
+def _compiled_case_insensitive_pattern(needle_lower: str) -> re.Pattern[str]:
+    return re.compile(re.escape(needle_lower), re.IGNORECASE)

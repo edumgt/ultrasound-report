@@ -1,0 +1,25 @@
+[Ultrasound Report]
+
+- Domain: {{ structured.domain | default('generic') }}
+- Primary Location: {{ structured.location | default('N/A') }}
+- Primary Lesion: {{ structured.lesion | default('N/A') }}
+- Primary Feature: {{ structured.feature | default('N/A') }}
+- Size: {{ structured.size | default('N/A') }}
+
+[Findings]
+{{ cleaned_text }}
+
+[Structured Summary]
+- Locations: {{ structured.locations | default([]) | join(', ') or 'N/A' }}
+- Lesions: {{ structured.lesions | default([]) | join(', ') or 'N/A' }}
+- Features: {{ structured.features | default([]) | join(', ') or 'N/A' }}
+- Measurements: {{ structured.measurements | default([]) | join(', ') or 'N/A' }}
+
+[Impression]
+{{ structured.impression | default('Clinical correlation recommended.') }}
+
+[Recommendation]
+{{ structured.recommendation | default('Clinical correlation recommended.') }}
+
+[Notes]
+{{ structured.notes | default('') }}

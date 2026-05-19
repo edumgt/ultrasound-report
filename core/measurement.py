@@ -44,7 +44,7 @@ def normalize_measurements(text: str) -> str:
 def extract_measurements(text: str) -> List[str]:
     normalized = normalize_measurements(text)
     matches = []
-    for match in re.finditer(r'\d+(?:\.\d+)?(?:×\d+(?:\.\d+)?)?(?:mm|cm)', normalized):
+    for match in re.finditer(r"\b\d+(?:\.\d+)?(?:×\d+(?:\.\d+)?)?(?:mm|cm)\b", normalized):
         token = match.group(0)
         if token not in matches:
             matches.append(token)

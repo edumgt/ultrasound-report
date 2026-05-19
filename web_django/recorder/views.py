@@ -156,7 +156,7 @@ def session_review(request: HttpRequest, session_id: int) -> HttpResponse:
 @require_POST
 def session_review_api(request: HttpRequest, session_id: int) -> JsonResponse:
     session = get_object_or_404(RecordingSession, pk=session_id)
-    payload = json.loads(request.body or '{}')
+    payload = json.loads(request.body.decode('utf-8') if request.body else '{}')
     session.patient_id = payload.get('patient_id', session.patient_id)
     session.corrected_transcript = payload.get('corrected_transcript', session.corrected_transcript)
     session.report_text = payload.get('report_text', session.report_text)

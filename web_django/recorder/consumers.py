@@ -51,10 +51,11 @@ class LiveTranscriptionConsumer(AsyncJsonWebsocketConsumer):
             await database_sync_to_async(append_audit_log)(self.session, 'websocket_disconnect', None, {'close_code': close_code})
 
     def _transcribe_chunk(self, bytes_data: bytes) -> str:
-        with tempfile.NamedTemporaryFile(suffix='.webm', delete=False) as tmp:
-            tmp.write(bytes_data)
-            temp_path = Path(tmp.name)
+        temp_path: Path | None = None
         try:
+            with tempfile.NamedTemporaryFile(suffix='.webm', delete=False) as tmp:
+                temp_path = Path(tmp.name)
+                tmp.write(bytes_data)
             segments, _info = self.stt.model.transcribe(
                 str(temp_path),
                 beam_size=self.stt.cfg.beam_size,
@@ -64,7 +65,8 @@ class LiveTranscriptionConsumer(AsyncJsonWebsocketConsumer):
             )
             return ' '.join(seg.text.strip() for seg in segments if getattr(seg, 'text', None)).strip()
         finally:
-            temp_path.unlink(missing_ok=True)
+            if temp_path is not None:
+                temp_path.unlink(missing_ok=True)
 
     async def _emit_preview(self, finalize: bool) -> None:
         bundle = self.report_service.build_report_bundle(self.full_transcript)

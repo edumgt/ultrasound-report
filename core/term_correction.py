@@ -1,5 +1,6 @@
 from __future__ import annotations
 from dataclasses import dataclass
+from functools import lru_cache
 from pathlib import Path
 from typing import Dict, List, Tuple, Any
 import json
@@ -86,5 +87,10 @@ class TermCorrector:
 
 
 def replace_case_insensitive(text: str, needle_lower: str, replacement: str) -> str:
-    pattern = re.compile(re.escape(needle_lower), re.IGNORECASE)
+    pattern = _compiled_case_insensitive_pattern(needle_lower)
     return pattern.sub(replacement, text)
+
+
+@lru_cache(maxsize=512)
+def _compiled_case_insensitive_pattern(needle_lower: str) -> re.Pattern[str]:
+    return re.compile(re.escape(needle_lower), re.IGNORECASE)
